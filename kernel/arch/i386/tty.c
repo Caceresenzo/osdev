@@ -44,9 +44,14 @@ void terminal_putchar(char chr) {
 	if (++terminal_column == VGA_WIDTH || uchhr == '\n')
 	{
 		terminal_column = 0;
-		if (++terminal_row == VGA_HEIGHT)
+		if (terminal_row + 1 == VGA_HEIGHT)
 		{
-			terminal_row = 0;
+			memmove(terminal_buffer, terminal_buffer + VGA_WIDTH, VGA_WIDTH * sizeof(uint16_t) * VGA_HEIGHT);
+			for (size_t x = 0; x < VGA_WIDTH; ++x) {
+				terminal_putentryat(' ', terminal_color, x, terminal_row);
+			}
+		} else {
+			terminal_row++;
 		}
 	}
 }
@@ -58,4 +63,12 @@ void terminal_write(const char *data, size_t size) {
 
 void terminal_writestring(const char *data) {
 	terminal_write(data, strlen(data));
+}
+
+void terminal_backspace(void) {
+	if (terminal_column != 0) {
+		--terminal_column;
+		terminal_putchar(' ');
+		--terminal_column;
+	}
 }
