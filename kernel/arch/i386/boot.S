@@ -38,11 +38,3 @@ _start:
 	jmp 1b
 
 .size _start, . - _start
-
-#
-.section .text
-.global _wait_interrupt
-.type _wait_interrupt, @function
-_wait_interrupt:
-2:
-	jmp 2b		// loop forever

@@ -4,15 +4,15 @@
 #include <stdio.h>
 #include <string.h>
 
-static bool print(const char* data, size_t length) {
-	const unsigned char* bytes = (const unsigned char*) data;
+static bool print(const char *data, size_t length) {
+	const unsigned char *bytes = (const unsigned char*) data;
 	for (size_t i = 0; i < length; i++)
 		if (putchar(bytes[i]) == EOF)
 			return false;
 	return true;
 }
 
-int printf(const char* format, ...) {
+int printf(const char *format, ...) {
 	va_list parameters;
 	va_start(parameters, format);
 
@@ -38,7 +38,7 @@ int printf(const char* format, ...) {
 			continue;
 		}
 
-		const char* format_begun_at = format++;
+		const char *format_begun_at = format++;
 
 		if (*format == 'c') {
 			format++;
@@ -50,9 +50,25 @@ int printf(const char* format, ...) {
 			if (!print(&c, sizeof(c)))
 				return -1;
 			written++;
+		} else if (*format == 'd') {
+			format++;
+			int i = va_arg(parameters, int);
+			if (!maxrem) {
+				// TODO: Set errno to EOVERFLOW.
+				return -1;
+			}
+			while (1) {
+				char c = '0' + (i % 10);
+				if (!print(&c, sizeof(c)))
+					return -1;
+				written++;
+				if ((i /= 10) == 0) {
+					break;
+				}
+			}
 		} else if (*format == 's') {
 			format++;
-			const char* str = va_arg(parameters, const char*);
+			const char *str = va_arg(parameters, const char*);
 			size_t len = strlen(str);
 			if (maxrem < len) {
 				// TODO: Set errno to EOVERFLOW.
