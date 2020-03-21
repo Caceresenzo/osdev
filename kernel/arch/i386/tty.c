@@ -1,10 +1,7 @@
 #include <arch/i386/vga.h>
-#include <stdbool.h>
-#include <stddef.h>
+#include <kernel/tty.h>
 #include <stdint.h>
 #include <string.h>
-
-#include <kernel/tty.h>
 
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
@@ -55,6 +52,12 @@ void terminal_putcharat(char chr, size_t x, size_t y) {
 	unsigned char uchhr = chr;
 
 	terminal_putentryat(uchhr, terminal_color, x, y);
+}
+
+void terminal_clear(void) {
+	memset(terminal_buffer, 0, VGA_WIDTH * sizeof(uint16_t) * VGA_HEIGHT);
+	terminal_column = 0;
+	terminal_row = 0;
 }
 
 void terminal_putchar(char chr) {

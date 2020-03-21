@@ -1,21 +1,20 @@
-#include <program/desktop.h>
-#include <program/crate.h>
-#include <program/jumper.h>
-#include <sys/types.h>
-#include <stdbool.h>
-#include <keys.h>
 #include <arch/i386/vga.h>
+#include <driver/keyboard.h>
+#include <graphics2d.h>
+#include <keys.h>
+#include <program/desktop.h>
+#include <program/edit.h>
+#include <program/jumper.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <driver/keyboard.h>
 
 t_program	g_programs[2] = {
 	{
-		.name = "Crate",
+		.name = "Edit",
 		.description = "A small text box",
 		.start = NULL,
 		.loop = NULL,
-		.kb_callback = &crate_keyboard_callback
+		.kb_callback = &edit_keyboard_callback
 	},
 	{
 		.name = "Jumper",
@@ -41,8 +40,8 @@ static void
 		has_changed = false;
 		if (g_programs[current].loop)
 			(*(g_programs[current].loop))(program_screen);
-			screen_apply(main_screen);
-			screen_apply(program_screen);
+		screen_apply(main_screen);
+		screen_apply(program_screen);
 		if (has_changed)
 			g2d_clear(program_screen->graphics);
 	}
@@ -62,6 +61,12 @@ static void
 	g2d_draw_str(main_screen->graphics, 3, 2, g_programs[current].description);
 	g2d_set_pen_color(program_screen->graphics, VGA_COLOR_BLACK, VGA_COLOR_BLACK);
 	g2d_fill(program_screen->graphics);
+	g2d_set_pen_color(main_screen->graphics, VGA_COLOR_WHITE, VGA_COLOR_RED);
+	g2d_draw_str(main_screen->graphics, 80 - 10, 1, "last:");
+	for (int x = 0; x < 15; ++x) {
+		g2d_set_pen_color(main_screen->graphics, x, x);
+		g2d_set_at(main_screen->graphics, 80 - 4 - x, 2);
+	}
 	has_changed = true;
 }
 
@@ -71,7 +76,8 @@ static t_uchar	g_chars_program[20 * 80] = { 0 };
 static uint8_t	g_colors_program[20 * 80] = { 0 };
 
 void
-	desktop_start(void) {
+	desktop_start(void)
+{
 	t_screen	screen[2];
 	t_g2d		g2d[2];
 
@@ -99,8 +105,8 @@ bool
 {
 	size_t	index;
 
-	g2d_set_pen_color(main_screen->graphics, VGA_COLOR_BLUE, VGA_COLOR_RED);
-	g2d_draw_char(main_screen->graphics, 80 - 4, 2, charset_get(code));
+	g2d_set_pen_color(main_screen->graphics, VGA_COLOR_WHITE, VGA_COLOR_RED);
+	g2d_draw_char(main_screen->graphics, 80 - 4, 1, charset_get(code));
 	if (code == KEY_LEFT_CONTROL)
 		change_program();
 	else

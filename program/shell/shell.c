@@ -1,0 +1,135 @@
+#include <driver/keyboard.h>
+#include <kernel/tty.h>
+#include <keys.h>
+#include <program/shell.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+
+char		g_sh_buffer[32] = { 0 };
+size_t		g_sh_buffer_len = 0;
+
+t_command	g_commands[5] = {
+	{
+		.name = "about",
+		.usage = "about",
+		.description = "A little About message.",
+		.handler = &cmd_about_handler
+	},
+	{
+		.name = "clear",
+		.usage = "clear",
+		.description = "Clear the screen.",
+		.handler = &cmd_clear_handler
+	},
+	{
+		.name = "echo",
+		.usage = "echo <msg>",
+		.description = "Echo a message.",
+		.handler = &cmd_echo_handler
+	},
+	{
+		.name = "desktop",
+		.usage = "desktop",
+		.description = "Start the desktop.",
+		.handler = &cmd_desktop_handler
+	},
+	{
+		.name = "help",
+		.usage = "help",
+		.description = "Display the list of commands.",
+		.handler = &cmd_help_handler
+	},
+};
+
+static bool	g_validate = false;
+
+static void
+	prepare_buffer()
+{
+	size_t		index;
+
+	g_sh_buffer[g_sh_buffer_len] = '\0';
+	index = 0;
+	while (g_sh_buffer[index])
+	{
+		if (g_sh_buffer[index] == ' ')
+		{
+			g_sh_buffer[index] = '\0';
+			g_sh_buffer_len = index;
+			break ;
+		}
+		index++;
+	}
+}
+
+static void
+	evaluate()
+{
+	bool		found;
+	size_t		index;
+	t_command	cmd;
+
+	if (g_sh_buffer_len == 0)
+		return ;
+	prepare_buffer();
+	index = 0;
+	found = false;
+	while (index < (sizeof(g_commands) / sizeof(t_command)))
+	{
+		cmd = g_commands[index];
+		if (memcmp(g_sh_buffer, cmd.name, g_sh_buffer_len) == 0)
+		{
+			found = true;
+			(*(cmd.handler))(g_sh_buffer, g_sh_buffer + g_sh_buffer_len + 1);
+			break ;
+		}
+		index++;
+	}
+	if (!found)
+		printf("Command not found: %s\n", g_sh_buffer);
+	g_sh_buffer_len = 0;
+}
+
+void
+	shell_start(void)
+{
+	keyboard_callback_set(&shell_keyboard_callback);
+	printf("$> ");
+	while (1)
+	{
+		printf("");
+		if (!g_validate)
+			continue ;
+		g_validate = false;
+		evaluate();
+		printf("$> ");
+	}
+}
+
+bool
+	shell_keyboard_callback(t_uchar code)
+{
+	if (code == KEY_ENTER)
+	{
+		g_validate = true;
+		printf("\n");
+	}
+	else if (code == KEY_BACKSPACE)
+	{
+		if (g_sh_buffer_len != 0)
+		{
+			terminal_backspace();
+			g_sh_buffer_len--;
+		}
+	}
+	else
+	{
+		if (g_sh_buffer_len < (sizeof(g_sh_buffer) / sizeof(char)) - 1)
+		{
+			g_sh_buffer[g_sh_buffer_len++] = charset_get(code);
+			printf("%c", charset_get(code));
+		}
+	}
+	return (true);
+}

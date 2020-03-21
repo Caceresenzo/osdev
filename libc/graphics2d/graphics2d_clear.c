@@ -1,6 +1,8 @@
 #include <graphics2d.h>
+#include <stdbool.h>
 #include <stddef.h>
-#include <arch/i386/vga.h>
+#include <string.h>
+#include <sys/types.h>
 
 bool
 	g2d_clear(t_g2d *g2d)

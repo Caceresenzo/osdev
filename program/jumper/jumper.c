@@ -1,14 +1,9 @@
-#include <program/jumper.h>
-#include <sys/types.h>
-#include <stdbool.h>
-#include <keys.h>
-#include <stdint.h>
 #include <arch/i386/vga.h>
-#include <stddef.h>
-#include <stdint.h>
 #include <graphics2d.h>
-#include <driver/screen.h>
-#include <string.h>
+#include <keys.h>
+#include <program/jumper.h>
+#include <stdint.h>
+#include <stdio.h>
 
 static float	g_player_x = 40.0f / 2;
 static float	g_player_y = 18.0f;

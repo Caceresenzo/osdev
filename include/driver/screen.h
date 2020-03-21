@@ -4,6 +4,7 @@
 # include <cursor.h>
 # include <graphics2d.h>
 # include <stdbool.h>
+# include <stddef.h>
 
 typedef struct	s_screen
 {
