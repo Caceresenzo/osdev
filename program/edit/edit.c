@@ -1,4 +1,5 @@
 #include <arch/i386/vga.h>
+#include <common.h>
 #include <graphics2d.h>
 #include <keys.h>
 #include <program/edit.h>
@@ -32,7 +33,7 @@ static void
 }
 
 bool
-	edit_keyboard_callback(t_screen *screen, t_uchar code)
+	edit_keyboard_callback(t_screen *screen, uint8 code)
 {
 	g2d_set_pen_color(screen->graphics, VGA_COLOR_WHITE, VGA_COLOR_BLACK);
 	if (code == KEY_ARROW_UP)

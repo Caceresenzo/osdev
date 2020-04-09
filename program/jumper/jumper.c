@@ -2,7 +2,6 @@
 #include <graphics2d.h>
 #include <keys.h>
 #include <program/jumper.h>
-#include <stdint.h>
 #include <stdio.h>
 
 static float	g_player_x = 40.0f / 2;
@@ -18,13 +17,15 @@ static void
 	g2d_draw_line_vert(g2d, 0, g2d->width - 1, g2d->height - 1);
 }
 
-static void move(float to_x, float to_y)
+static void
+	move(float to_x, float to_y)
 {
 	g_player_x += to_x;
 	g_player_y += to_y;
 }
 
-static void logic()
+static void
+	logic()
 {
 	if (key_state_get(KEY_Z))
 		move(0, -0.3);

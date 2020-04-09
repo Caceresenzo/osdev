@@ -3,8 +3,7 @@
 
 # include <cursor.h>
 # include <graphics2d.h>
-# include <stdbool.h>
-# include <stddef.h>
+# include <common.h>
 
 typedef struct	s_screen
 {

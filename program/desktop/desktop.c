@@ -1,12 +1,11 @@
 #include <arch/i386/vga.h>
+#include <common.h>
 #include <driver/keyboard.h>
 #include <graphics2d.h>
 #include <keys.h>
 #include <program/desktop.h>
 #include <program/edit.h>
 #include <program/jumper.h>
-#include <stddef.h>
-#include <stdint.h>
 
 t_program	g_programs[2] = {
 	{
@@ -70,10 +69,10 @@ static void
 	has_changed = true;
 }
 
-static t_uchar	g_chars_main[4 * 80] = { 0 };
-static uint8_t	g_colors_main[4 * 80] = { 0 };
-static t_uchar	g_chars_program[20 * 80] = { 0 };
-static uint8_t	g_colors_program[20 * 80] = { 0 };
+static uint8	g_chars_main[4 * 80] = { 0 };
+static uint8	g_colors_main[4 * 80] = { 0 };
+static uint8	g_chars_program[20 * 80] = { 0 };
+static uint8	g_colors_program[20 * 80] = { 0 };
 
 void
 	desktop_start(void)
@@ -101,7 +100,7 @@ void
 }
 
 bool
-	desktop_keyboard_callback(t_uchar code)
+	desktop_keyboard_callback(uint8 code)
 {
 	size_t	index;
 

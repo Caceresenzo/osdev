@@ -1,10 +1,9 @@
 #ifndef _PROGRAM_EDIT_H
 # define _PROGRAM_EDIT_H
 
-# include <sys/types.h>
-# include <driver/screen.h>
-# include <stdbool.h>
+#include <common.h>
+#include <driver/screen.h>
 
-bool	edit_keyboard_callback(t_screen *screen, t_uchar code);
+bool	edit_keyboard_callback(t_screen *screen, uint8 code);
 
 #endif

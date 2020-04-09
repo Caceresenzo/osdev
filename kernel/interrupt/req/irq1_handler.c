@@ -1,6 +1,5 @@
 #include <driver/keyboard.h>
 #include <kernel/interrupt.h>
-#include <io.h>
 
 void irq1_handler(void)
 {

@@ -1,5 +1,5 @@
+#include <common.h>
 #include <keys.h>
-#include <stddef.h>
 
 t_charset g_charsets[] = {
 	{

@@ -1,10 +1,9 @@
 #include <driver/keyboard.h>
-#include <stddef.h>
 
-bool	(*g_keyboard_callback)(t_uchar) = NULL;
+bool	(*g_keyboard_callback)(uint8) = NULL;
 
 bool
-	keyboard_callback_set(bool (*callback)(t_uchar))
+	keyboard_callback_set(bool (*callback)(uint8))
 {
 	if (callback == NULL)
 		return (false);
@@ -13,7 +12,7 @@ bool
 }
 
 bool
-	keyboard_callback_fire(t_uchar code)
+	keyboard_callback_fire(uint8 code)
 {
 	if (g_keyboard_callback == NULL)
 		return (false);

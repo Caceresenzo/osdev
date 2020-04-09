@@ -1,9 +1,9 @@
-#include <graphics2d.h>
-#include <stddef.h>
 #include <arch/i386/vga.h>
+#include <common.h>
+#include <graphics2d.h>
 
 bool
-	g2d_set_pen_color(t_g2d *g2d, vga_color fg_color, vga_color bg_color)
+	g2d_set_pen_color(t_g2d *g2d, vga_color_t fg_color, vga_color_t bg_color)
 {
 	if (g2d == NULL)
 		return (false);

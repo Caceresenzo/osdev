@@ -1,5 +1,4 @@
 #include <kernel/interrupt.h>
-#include <io.h>
 
 void irq13_handler(void)
 {

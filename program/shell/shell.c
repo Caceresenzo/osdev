@@ -1,8 +1,7 @@
+#include <arch/i386/vga.h>
 #include <driver/keyboard.h>
-#include <kernel/tty.h>
 #include <keys.h>
 #include <program/shell.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -78,7 +77,8 @@ static void
 	while (index < (sizeof(g_commands) / sizeof(t_command)))
 	{
 		cmd = g_commands[index];
-		if (memcmp(g_sh_buffer, cmd.name, g_sh_buffer_len) == 0)
+		if (memcmp(g_sh_buffer, cmd.name, g_sh_buffer_len) == 0
+			&& strlen(cmd.name) == g_sh_buffer_len)
 		{
 			found = true;
 			(*(cmd.handler))(g_sh_buffer, g_sh_buffer + g_sh_buffer_len + 1);
@@ -107,19 +107,22 @@ void
 	}
 }
 
+int qsd = 0;
+
 bool
-	shell_keyboard_callback(t_uchar code)
+	shell_keyboard_callback(uint8 code)
 {
 	if (code == KEY_ENTER)
 	{
-		g_validate = true;
+		int x = 0 / qsd;
+		g_validate = !x;
 		printf("\n");
 	}
 	else if (code == KEY_BACKSPACE)
 	{
 		if (g_sh_buffer_len != 0)
 		{
-			terminal_backspace();
+			vga_backspace();
 			g_sh_buffer_len--;
 		}
 	}

@@ -1,9 +1,7 @@
 #ifndef _PROGRAM_SHELL_H
 # define _PROGRAM_SHELL_H
 
-# include <sys/types.h>
-# include <stddef.h>
-# include <stdbool.h>
+# include <common.h>
 
 typedef struct	s_command
 {
@@ -18,7 +16,7 @@ size_t		g_sh_buffer_len;
 t_command	g_commands[5];
 
 void	shell_start(void);
-bool	shell_keyboard_callback(t_uchar code);
+bool	shell_keyboard_callback(uint8 code);
 
 void	cmd_about_handler(char *name, char *args);
 void	cmd_clear_handler(char *name, char *args);

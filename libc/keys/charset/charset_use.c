@@ -1,5 +1,4 @@
 #include <keys.h>
-#include <stddef.h>
 
 bool
 	charset_use(t_charset *charset)

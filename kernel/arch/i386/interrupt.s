@@ -15,7 +15,7 @@ global irq13
 global irq14
 global irq15
 
-global load_idt
+global idt_load
 
 global irq0_handler
 global irq1_handler
@@ -147,7 +147,7 @@ irq15:
   popa
   iret
 
-load_idt:
+idt_load:
 	mov edx, [esp + 4]
 	lidt [edx]
 	sti

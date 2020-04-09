@@ -1,11 +1,11 @@
-#include <stdio.h>
-#include <kernel/tty.h>
+#include <arch/i386/vga.h>
 
 int
-	putchar(int chr) {
+	putchar(int chr)
+{
 	char c;
 
 	c = (char) chr;
-	terminal_write(&c, sizeof(c));
+	vga_write(&c, sizeof(char));
 	return (chr);
 }

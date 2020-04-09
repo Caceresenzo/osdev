@@ -1,5 +1,5 @@
+#include <common.h>
 #include <graphics2d.h>
-#include <stddef.h>
 
 bool
 	g2d_draw_line_hor(t_g2d *g2d, size_t x, size_t y_start, size_t y_end)

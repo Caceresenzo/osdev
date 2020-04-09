@@ -1,14 +1,13 @@
-#include <kernel.h>
+#include <arch/i386/vga.h>
 #include <kernel/interrupt.h>
-#include <stdio.h>
-#include <kernel/tty.h>
 #include <keys.h>
 #include <program/shell.h>
+#include <stdio.h>
 
 void kmain(void) {
-	idt_init();
+	idt_initialize();
 	charset_use(&g_charsets[0]);
-	terminal_initialize();
+	vga_initialize();
 	printf("Hello, kernel World!\n");
 	shell_start();
 	while (1);

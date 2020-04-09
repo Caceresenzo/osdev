@@ -1,5 +1,5 @@
+#include <common.h>
 #include <graphics2d.h>
-#include <stddef.h>
 
 bool
 	g2d_fill(t_g2d *g2d)

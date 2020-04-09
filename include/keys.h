@@ -1,7 +1,7 @@
 #ifndef _KEYS_H
 # define _KEYS_H
 
-# include <stdbool.h>
+# include <common.h>
 
 # define KEY_ARROW_UP 72
 # define KEY_ARROW_DOWN 80

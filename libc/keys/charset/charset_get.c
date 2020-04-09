@@ -1,5 +1,4 @@
 #include <keys.h>
-#include <stddef.h>
 
 char
 	charset_get(int code)
