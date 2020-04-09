@@ -1,4 +1,5 @@
 #include <arch/i386/vga.h>
+#include <kernel/ports.h>
 #include <string.h>
 
 static size_t	vga_row;
@@ -39,12 +40,12 @@ void
 {
 	if (direction == VGA_DIR_UP)
 	{
-		memmove(vga_buffer + VGA_WIDTH, vga_buffer, VGA_MEMORY_SIZE_BYTE);
+//		memmove(vga_buffer + VGA_WIDTH, vga_buffer, VGA_MEMORY_SIZE_BYTE);
 		vga_clear_line(0);
 	}
 	else if (direction == VGA_DIR_DOWN)
 	{
-		memmove(vga_buffer, vga_buffer + VGA_WIDTH, VGA_MEMORY_SIZE_BYTE);
+//		memmove(vga_buffer, vga_buffer + VGA_WIDTH, VGA_MEMORY_SIZE_BYTE);
 		vga_clear_line(VGA_HEIGHT - 1);
 	}
 }
@@ -79,10 +80,10 @@ void
 	uint16	location;
 
 	location = vga_index(vga_column, vga_row);
-	outb(VGA_PORT_CONTROL, VGA_DATA_CURSOR_LOCATION_HIGH);
-	outb(VGA_PORT_DATA, (location >> 8) & 0xFF);
-	outb(VGA_PORT_CONTROL, VGA_DATA_CURSOR_LOCATION_LOW);
-	outb(VGA_PORT_DATA, location & 0xFF);
+	outb(VGA_COMMAND, VGA_DATA_CURSOR_LOCATION_HIGH);
+	outb(VGA_DATA, (location >> 8) & 0xFF);
+	outb(VGA_COMMAND, VGA_DATA_CURSOR_LOCATION_LOW);
+	outb(VGA_DATA, location & 0xFF);
 }
 
 void

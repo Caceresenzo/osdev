@@ -3,10 +3,17 @@
 #include <keys.h>
 #include <stdio.h>
 
-int shift = 0;
+static int shift = 0;
 
 void
-	keyboard_interrupt(void)
+	keyboard_initialize(void)
+{
+	interrupt_handler_register(IRQ1, &keyboard_interrupt);
+	charset_use(&g_charsets[0]);
+}
+
+void
+	keyboard_interrupt(registers_t *regs)
 {
 	uint8	scancode;
 

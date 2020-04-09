@@ -8,7 +8,9 @@ LINKER_FILE				= kernel/arch/i386/linker.ld
 SOURCES_S				=	kernel/arch/i386/boot.S \
 							kernel/arch/i386/crti.S \
 							kernel/arch/i386/crtn.S
-SOURCES_ASM				=	kernel/arch/i386/interrupt.s
+SOURCES_ASM				=	kernel/asm/gdt_flush.s \
+							kernel/asm/idt_flush.s \
+							kernel/asm/interrupt.s
 SOURCES_C				=	./driver/keyboard/keyboard.c \
 							./driver/keyboard/keyboard_callback.c \
 							./driver/screen/screen_apply.c \
@@ -16,24 +18,11 @@ SOURCES_C				=	./driver/keyboard/keyboard.c \
 							./driver/screen/screen_set_offset.c \
 							./kernel/arch/i386/vga.c \
 							./kernel/common.c \
-							./kernel/interrupt/idt/idt.c \
-							./kernel/interrupt/idt/idt_set.c \
-							./kernel/interrupt/req/irq0_handler.c \
-							./kernel/interrupt/req/irq10_handler.c \
-							./kernel/interrupt/req/irq11_handler.c \
-							./kernel/interrupt/req/irq12_handler.c \
-							./kernel/interrupt/req/irq13_handler.c \
-							./kernel/interrupt/req/irq14_handler.c \
-							./kernel/interrupt/req/irq15_handler.c \
-							./kernel/interrupt/req/irq1_handler.c \
-							./kernel/interrupt/req/irq2_handler.c \
-							./kernel/interrupt/req/irq3_handler.c \
-							./kernel/interrupt/req/irq4_handler.c \
-							./kernel/interrupt/req/irq5_handler.c \
-							./kernel/interrupt/req/irq6_handler.c \
-							./kernel/interrupt/req/irq7_handler.c \
-							./kernel/interrupt/req/irq8_handler.c \
-							./kernel/interrupt/req/irq9_handler.c \
+							./kernel/gdt.c \
+							./kernel/idt.c \
+							./kernel/interrupt.c \
+							./kernel/interrupt_registry.c \
+							./kernel/descriptor_tables.c \
 							./kernel/kmain.c \
 							./libc/graphics2d/graphics2d_clear.c \
 							./libc/graphics2d/graphics2d_draw_char.c \
@@ -81,7 +70,8 @@ ISO_BUILD_DIR			= build/iso
 
 GRUB_DIR				= grub
 
-COMPILER_C_ARGUMENTS	= -std=gnu99 -ffreestanding -m32 -nostdlib -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -O2 -Wall -Wextra
+COMPILER_C_ARGUMENTS	= -std=gnu99 -ffreestanding -nostdlib -nodefaultlibs  -fno-builtin -fno-stack-protector -nostartfiles -Wall -Wextra  -m32 -O2
+ASSEMBLER_ARGUMENTS		= -std=gnu99 -ffreestanding -nostdlib -nodefaultlibs  -fno-builtin -fno-stack-protector -nostartfiles -lgcc
 
 .S.o:
 	i386-elf-gcc -c $< -o ${<:.S=.o}
@@ -97,7 +87,7 @@ all: kernel
 kernel: $(OS_BIN)
 	
 $(OS_BIN): $(OBJECTS_ASM) $(OBJECTS_C) $(OBJECTS_S)
-	i386-elf-gcc -T $(LINKER_FILE) -o $(OS_BIN) -ffreestanding -O2 -nostdlib $(OBJECTS_ASM) $(OBJECTS_C) $(OBJECTS_S) -lgcc
+	i386-elf-gcc -T $(LINKER_FILE) -o $(OS_BIN) $(ASSEMBLER_ARGUMENTS) $(OBJECTS_ASM) $(OBJECTS_C) $(OBJECTS_S) 
 	@printf "confirming multiboot... "
 	@if grub-file --is-x86-multiboot $(OS_BIN); then echo ok; else echo failed; exit 1; fi
 
@@ -110,7 +100,7 @@ $(OS_ISO): kernel
 	grub-mkrescue -o $(OS_ISO) $(ISO_BUILD_DIR)
 
 run-kernel: $(OS_BIN)
-	$(QEMU) -kernel $(OS_BIN)
+	$(QEMU) -D logs.txt -d int -kernel $(OS_BIN)
 
 run-iso: $(OS_ISO)
 	$(QEMU) -cdrom $(OS_ISO)

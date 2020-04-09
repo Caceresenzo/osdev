@@ -3,9 +3,6 @@
 
 # include <common.h>
 
-# define VGA_PORT_CONTROL 0x3D4
-# define VGA_PORT_DATA 0x3D5
-
 # define VGA_DATA_CURSOR_LOCATION_HIGH 14
 # define VGA_DATA_CURSOR_LOCATION_LOW 15
 

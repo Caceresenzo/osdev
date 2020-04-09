@@ -1,56 +1,40 @@
-#ifndef _KERNEL_INTERRUPT_H
-# define _KERNEL_INTERRUPT_H
+#ifndef KERNEL_INTERRUPT_H_
+# define KERNEL_INTERRUPT_H_
 
-# include <common.h>
+# define IRQ0 32
+# define IRQ1 33
+# define IRQ2 34
+# define IRQ3 35
+# define IRQ4 36
+# define IRQ5 37
+# define IRQ6 38
+# define IRQ7 39
+# define IRQ8 40
+# define IRQ9 41
+# define IRQ10 42
+# define IRQ11 43
+# define IRQ12 44
+# define IRQ13 45
+# define IRQ14 46
+# define IRQ15 47
 
-typedef struct __attribute__((packed))
+typedef struct
 {
-	uint16		offset_lowerbits;
-	uint16		selector;
-	uint8		zero;
-	uint8		type_attr;
-	uint16		offset_higherbits;
-} t_idt_entry;
+   uint32 ds;                  // Data segment selector
+   uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax; // Pushed by pusha.
+   uint32 int_no, err_code;    // Interrupt number and error code (if applicable)
+   uint32 eip, cs, eflags, useresp, ss; // Pushed by the processor automatically.
+} registers_t;
 
-t_idt_entry g_idt[256];
+char	*interrupt_errors[256];
 
-void		irq0_handler(void);
-void		irq1_handler(void);
-void		irq2_handler(void);
-void		irq3_handler(void);
-void		irq4_handler(void);
-void		irq5_handler(void);
-void		irq6_handler(void);
-void		irq7_handler(void);
-void		irq8_handler(void);
-void		irq9_handler(void);
-void		irq10_handler(void);
-void		irq11_handler(void);
-void		irq12_handler(void);
-void		irq13_handler(void);
-void		irq14_handler(void);
-void		irq15_handler(void);
+typedef void (*isr_t)(registers_t *);
+isr_t	interrupt_handlers[256];
 
-extern int	idt_load();
+void	isr_handler(registers_t regs);
+void	irq_handler(registers_t regs);
 
-extern int	irq0();
-extern int	irq1();
-extern int	irq2();
-extern int	irq3();
-extern int	irq4();
-extern int	irq5();
-extern int	irq6();
-extern int	irq7();
-extern int	irq8();
-extern int	irq9();
-extern int	irq10();
-extern int	irq11();
-extern int	irq12();
-extern int	irq13();
-extern int	irq14();
-extern int	irq15();
-
-void		idt_initialize();
-void		idt_set(int id, int selector, int type_attr, void *ptr);
+isr_t	interrupt_handler_register(uint8 id, isr_t isr);
+char	*interrupt_error_get(uint8 id);
 
 #endif

@@ -11,6 +11,23 @@ static bool print(const char *data, size_t length) {
 	return true;
 }
 
+static int
+	print_number(long number, int base)
+{
+	bool	negative;
+	int		ret;
+
+	if (number == 0)
+		return 0;
+	if ((negative = number < 0)) {
+		putchar('-');
+		number = -number;
+	}
+	ret = 1 + negative + print_number(number / base, base);
+	putchar("0123456789abcdefghjklmnopqrstuvwxyz"[number % base]);
+	return (ret);
+}
+
 int printf(const char *format, ...) {
 	va_list parameters;
 	va_start(parameters, format);
@@ -56,15 +73,28 @@ int printf(const char *format, ...) {
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
 			}
-			while (1) {
-				char c = '0' + (i % 10);
-				if (!print(&c, sizeof(c)))
-					return -1;
+			if (i == 0)
+			{
+				print("0", 1);
 				written++;
-				if ((i /= 10) == 0) {
-					break;
-				}
 			}
+			else
+				written += print_number(i, 10);
+		} else if (*format == 'x') {
+			format++;
+			int i = va_arg(parameters, int);
+			if (!maxrem) {
+				// TODO: Set errno to EOVERFLOW.
+				return -1;
+			}
+			print("0x", 2);
+			if (i == 0)
+			{
+				print("0", 1);
+				written++;
+			}
+			else
+				written += print_number(i, 16);
 		} else if (*format == 's') {
 			format++;
 			const char *str = va_arg(parameters, const char*);
