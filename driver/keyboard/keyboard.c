@@ -17,6 +17,7 @@ void
 {
 	uint8	scancode;
 
+	(void) regs;
 	scancode = inb(0x60);
 	if (scancode & 0x80) {
 		key_state_set(scancode & 0x7F, false);

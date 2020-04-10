@@ -40,12 +40,12 @@ void
 {
 	if (direction == VGA_DIR_UP)
 	{
-//		memmove(vga_buffer + VGA_WIDTH, vga_buffer, VGA_MEMORY_SIZE_BYTE);
+		memmove(vga_buffer + VGA_WIDTH, vga_buffer, VGA_MEMORY_SIZE_BYTE);
 		vga_clear_line(0);
 	}
 	else if (direction == VGA_DIR_DOWN)
 	{
-//		memmove(vga_buffer, vga_buffer + VGA_WIDTH, VGA_MEMORY_SIZE_BYTE);
+		memmove(vga_buffer, vga_buffer + VGA_WIDTH, VGA_MEMORY_SIZE_BYTE);
 		vga_clear_line(VGA_HEIGHT - 1);
 	}
 }

@@ -21,7 +21,6 @@ static bool
 void
 	isr_handler(registers_t regs)
 {
-	printf("x");
 	if (!handle(regs))
 	{
 		printf("[isr] Unhandled interrupt: %d (%s)\n", regs.int_no & 0xFF, interrupt_error_get(regs.int_no & 0xFF));
@@ -32,7 +31,6 @@ void
 void
 	irq_handler(registers_t regs)
 {
-	printf("y");
 	if (regs.int_no >= 40)
 		outb(PIC_SLAVE_COMMAND, PIC_EOI);
 	outb(PIC_MASTER_COMMAND, PIC_EOI);

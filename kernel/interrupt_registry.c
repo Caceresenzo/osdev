@@ -1,5 +1,6 @@
 #include <common.h>
 #include <kernel/interrupt.h>
+#include <stdio.h>
 
 char	*interrupt_errors[256] = { //
 	[0] = "Division by zero exception", //
