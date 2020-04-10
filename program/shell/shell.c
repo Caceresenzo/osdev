@@ -8,7 +8,7 @@
 char		g_sh_buffer[32] = { 0 };
 size_t		g_sh_buffer_len = 0;
 
-t_command	g_commands[5] = {
+t_command	g_commands[6] = {
 	{
 		.name = "about",
 		.usage = "about",
@@ -38,6 +38,12 @@ t_command	g_commands[5] = {
 		.usage = "help",
 		.description = "Display the list of commands.",
 		.handler = &cmd_help_handler
+	},
+	{
+		.name = "sizeof",
+		.usage = "sizeof",
+		.description = "Display a list of types with their sizes in bytes.",
+		.handler = &cmd_sizeof_handler
 	},
 };
 
