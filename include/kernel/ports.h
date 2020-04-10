@@ -11,4 +11,9 @@
 
 # define PIC_EOI 0x20
 
+# define PIT_DATA_CHN0 0x40
+# define PIT_DATA_CHN1 0x41
+# define PIT_DATA_CHN2 0x42
+# define PIT_COMMAND 0x43
+
 #endif

@@ -18,12 +18,13 @@ SOURCES_C				=	./driver/keyboard/keyboard.c \
 							./driver/screen/screen_set_offset.c \
 							./kernel/arch/i386/vga.c \
 							./kernel/common.c \
+							./kernel/descriptor_tables.c \
 							./kernel/gdt.c \
 							./kernel/idt.c \
 							./kernel/interrupt.c \
 							./kernel/interrupt_registry.c \
-							./kernel/descriptor_tables.c \
 							./kernel/kmain.c \
+							./kernel/timer.c \
 							./libc/graphics2d/graphics2d_clear.c \
 							./libc/graphics2d/graphics2d_draw_char.c \
 							./libc/graphics2d/graphics2d_draw_line_horizontal.c \

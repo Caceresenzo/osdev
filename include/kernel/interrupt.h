@@ -1,6 +1,8 @@
 #ifndef KERNEL_INTERRUPT_H_
 # define KERNEL_INTERRUPT_H_
 
+# include <common.h>
+
 # define IRQ0 32
 # define IRQ1 33
 # define IRQ2 34
