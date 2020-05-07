@@ -5,6 +5,8 @@
 #  define NULL ((void *)0)
 # endif
 
+# define UNUSED(var) var __attribute__((unused))
+
 typedef long long int64;
 typedef unsigned long long uint64;
 

@@ -7,8 +7,6 @@
 void
 	descriptor_tables_initialize(void)
 {
-	cli();
 	gdt_initialize();
 	idt_initialize();
-	sti();
 }

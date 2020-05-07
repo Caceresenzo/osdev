@@ -98,6 +98,8 @@ int printf(const char *format, ...) {
 		} else if (*format == 's') {
 			format++;
 			const char *str = va_arg(parameters, const char*);
+			if (str == NULL)
+				str = "(null)";
 			size_t len = strlen(str);
 			if (maxrem < len) {
 				// TODO: Set errno to EOVERFLOW.

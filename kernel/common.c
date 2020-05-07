@@ -5,7 +5,7 @@ uint8
 {
    uint8 ret;
 
-   asm volatile("inb %1, %0" : "=a" (ret) : "dN" (port));
+   asm volatile ("inb %1, %0" : "=a" (ret) : "dN" (port));
    return (ret);
 }
 

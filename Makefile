@@ -16,6 +16,7 @@ SOURCES_C				=	./driver/keyboard/keyboard.c \
 							./driver/screen/screen_apply.c \
 							./driver/screen/screen_init.c \
 							./driver/screen/screen_set_offset.c \
+							./driver/serial/serial.c \
 							./kernel/arch/i386/vga.c \
 							./kernel/common.c \
 							./kernel/descriptor_tables.c \
@@ -25,6 +26,11 @@ SOURCES_C				=	./driver/keyboard/keyboard.c \
 							./kernel/interrupt_registry.c \
 							./kernel/kmain.c \
 							./kernel/timer.c \
+							./kernel/panic.c \
+							./libc/bits/bitset8.c \
+							./libc/bits/bitset16.c \
+							./libc/bits/bitset32.c \
+							./libc/bits/bitset64.c \
 							./libc/graphics2d/graphics2d_clear.c \
 							./libc/graphics2d/graphics2d_draw_char.c \
 							./libc/graphics2d/graphics2d_draw_line_horizontal.c \
@@ -59,6 +65,7 @@ SOURCES_C				=	./driver/keyboard/keyboard.c \
 							./program/shell/command/cmd_desktop.c \
 							./program/shell/command/cmd_echo.c \
 							./program/shell/command/cmd_help.c \
+							./program/shell/command/cmd_sizeof.c \
 							./program/shell/shell.c
 
 OBJECTS_S				= $(SOURCES_S:.S=.o)
@@ -100,8 +107,8 @@ $(OS_ISO): kernel
 	cp $(GRUB_DIR)/grub.cfg $(ISO_BUILD_DIR)/boot/grub/grub.cfg
 	grub-mkrescue -o $(OS_ISO) $(ISO_BUILD_DIR)
 
-run-kernel: $(OS_BIN)
-	$(QEMU) -D logs.txt -d int -kernel $(OS_BIN)
+run-kernel: $(OS_BIN) #,cpu,exec,in_asm -no-shutdown 
+	$(QEMU) -D logs.txt -d int -no-reboot -kernel $(OS_BIN)
 
 run-iso: $(OS_ISO)
 	$(QEMU) -cdrom $(OS_ISO)
