@@ -9,13 +9,13 @@ void
 
 	(void) name;
 	(void) args;
-	printf("--- HELP ---\n\n");
+	printk("--- HELP ---\n\n");
 	index = 0;
 	while (index < (sizeof(g_commands) / sizeof(t_command)))
 	{
-		printf("%s\n", g_commands[index].usage);
-		printf(" > %s\n\n", g_commands[index].description);
+		printk("%s\n", g_commands[index].usage);
+		printk(" > %s\n\n", g_commands[index].description);
 		index++;
 	}
-	printf("--- HELP END ---\n");
+	printk("--- HELP END ---\n");
 }

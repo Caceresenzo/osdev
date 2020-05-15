@@ -43,7 +43,7 @@ static void
 void
 	jumper_loop(t_screen *screen)
 {
-	for (int time = 0; time < 1000000; ++time) { printf(""); }
+	for (int time = 0; time < 1000000; ++time) { printk(""); }
 	logic();
 	g2d_clear(screen->graphics);
 	redraw(screen->graphics);

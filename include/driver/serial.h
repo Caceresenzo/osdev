@@ -73,7 +73,7 @@ void	serial_initialize(uint16 port);
 bool	serial_available(uint16 port);
 uint8	serial_read(uint16 port);
 bool	serial_is_transmit_empty(uint16 port);
-void	serial_write(uint16 port, uint8 chr);
-void	serial_write_str(uint16 port, uint8 *str);
+void	serial_write(uint16 port, int8 chr);
+void	serial_write_str(uint16 port, int8 *str);
 
 #endif /* DRIVER_SERIAL_H_ */

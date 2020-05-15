@@ -2,5 +2,5 @@
 
 int
 	puts(const char* str) {
-	return (printf("%s\n", str));
+	return (printk("%s\n", str));
 }

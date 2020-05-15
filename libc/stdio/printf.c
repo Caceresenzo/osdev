@@ -12,7 +12,7 @@ static bool print(const char *data, size_t length) {
 }
 
 static int
-	print_number(long number, int base)
+	print_number(long number, unsigned int base)
 {
 	bool	negative;
 	int		ret;
@@ -28,7 +28,19 @@ static int
 	return (ret);
 }
 
-int printf(const char *format, ...) {
+static int
+	print_unumber(unsigned long number, unsigned int base)
+{
+	int		ret;
+
+	if (number == 0)
+		return 0;
+	ret = 1 + print_unumber(number / base, base);
+	putchar("0123456789abcdefghjklmnopqrstuvwxyz"[number % base]);
+	return (ret);
+}
+
+int printk(const char *format, ...) {
 	va_list parameters;
 	va_start(parameters, format);
 
@@ -68,7 +80,7 @@ int printf(const char *format, ...) {
 			written++;
 		} else if (*format == 'd') {
 			format++;
-			int i = va_arg(parameters, int);
+			long i = va_arg(parameters, long);
 			if (!maxrem) {
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
@@ -80,9 +92,51 @@ int printf(const char *format, ...) {
 			}
 			else
 				written += print_number(i, 10);
+		} else if (*format == 'u') {
+			format++;
+			unsigned long i = va_arg(parameters, unsigned long);
+			if (!maxrem) {
+				// TODO: Set errno to EOVERFLOW.
+				return -1;
+			}
+			if (i == 0)
+			{
+				print("0", 1);
+				written++;
+			}
+			else
+				written += print_unumber(i, 10);
+		} else if (*format == 'b') {
+			format++;
+			unsigned long i = va_arg(parameters, unsigned long);
+			if (!maxrem) {
+				// TODO: Set errno to EOVERFLOW.
+				return -1;
+			}
+			if (i == 0)
+			{
+				print("0", 1);
+				written++;
+			}
+			else
+				written += print_number(i, 2);
 		} else if (*format == 'x') {
 			format++;
 			int i = va_arg(parameters, int);
+			if (!maxrem) {
+				// TODO: Set errno to EOVERFLOW.
+				return -1;
+			}
+			if (i == 0)
+			{
+				print("0", 1);
+				written++;
+			}
+			else
+				written += print_number(i, 16);
+		} else if (*format == 'p') {
+			format++;
+			unsigned long i = va_arg(parameters, unsigned long);
 			if (!maxrem) {
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
@@ -94,7 +148,7 @@ int printf(const char *format, ...) {
 				written++;
 			}
 			else
-				written += print_number(i, 16);
+				written += print_unumber(i, 16);
 		} else if (*format == 's') {
 			format++;
 			const char *str = va_arg(parameters, const char*);

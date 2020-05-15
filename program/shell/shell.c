@@ -93,7 +93,7 @@ static void
 		index++;
 	}
 	if (!found)
-		printf("Command not found: %s\n", g_sh_buffer);
+		printk("Command not found: %s\n", g_sh_buffer);
 	g_sh_buffer_len = 0;
 }
 
@@ -101,15 +101,15 @@ void
 	shell_start(void)
 {
 	keyboard_callback_set(&shell_keyboard_callback);
-	printf("$> ");
+	printk("$> ");
 	while (1)
 	{
-		printf("");
+		printk("");
 		if (!g_validate)
 			continue ;
 		g_validate = false;
 		evaluate();
-		printf("$> ");
+		printk("$> ");
 	}
 }
 
@@ -122,7 +122,7 @@ bool
 	{
 		int x = 0 / qsd;
 		g_validate = !x;
-		printf("\n");
+		printk("\n");
 	}
 	else if (code == KEY_BACKSPACE)
 	{
@@ -137,7 +137,7 @@ bool
 		if (g_sh_buffer_len < (sizeof(g_sh_buffer) / sizeof(char)) - 1)
 		{
 			g_sh_buffer[g_sh_buffer_len++] = charset_get(code);
-			printf("%c", charset_get(code));
+			printk("%c", charset_get(code));
 		}
 	}
 	return (true);

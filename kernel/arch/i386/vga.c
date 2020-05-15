@@ -89,9 +89,11 @@ void
 void
 	vga_put_char(uint8 chr)
 {
-	if (chr != '\n')
+	if (chr != '\n' && chr != '\r')
 		vga_put_entry_at(chr, vga_color, vga_column, vga_row);
-	if (++vga_column == VGA_WIDTH || chr == '\n')
+	if (chr == '\r')
+		vga_column = 0;
+	else if (++vga_column == VGA_WIDTH || chr == '\n')
 	{
 		vga_column = 0;
 		if (vga_row + 1 == VGA_HEIGHT)

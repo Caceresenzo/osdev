@@ -37,14 +37,14 @@
 ** @note ORDER IS IMPORTANT !!
 */
 
-typedef struct __attribute__((packed)) {
+typedef struct {
 	uint16	limit_low;
 	uint16	base_low;
 	uint8	base_middle;
 	uint8	access;
 	uint8	granularity;
 	uint8	base_high;
-} gdt_entry_t;
+} __attribute__((packed)) gdt_entry_t;
 
 /*
 ** @param limit
@@ -54,11 +54,11 @@ typedef struct __attribute__((packed)) {
 ** @note ORDER IS IMPORTANT !!
 */
 
-typedef struct __attribute__((packed))
+typedef struct
 {
    uint16	limit;
    uint32	base;
-} gdt_ptr_t;
+} __attribute__((packed)) gdt_ptr_t;
 
 gdt_entry_t	gdt_entries[5];
 gdt_ptr_t	gdt_ptr;

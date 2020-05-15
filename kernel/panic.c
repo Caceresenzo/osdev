@@ -7,7 +7,7 @@ void
 	panic(char *file, uint32 line, char *reason)
 {
 	cli();
-	printf("[kernel] panic: %s (%s:%d)\n", reason, file != NULL ? file : "?", line);
+	printk("[kernel] panic: %s (%s:%d)\n", reason, file != NULL ? file : "?", line);
 	abort();
 }
 
@@ -17,11 +17,11 @@ bool
 	char	*format;
 
 	if (message == NULL)
-		format = "[kernel] panic assert: (%s:%d) -> %s\n";
+		format = "[kernel] panic assert: %s:%d\n[kernel] panic assert: Condition not met: %s\n[kernel] panic assert: No message provided.\n";
 	else
-		format = "[kernel] panic assert: (%s:%d) -> %s: %s\n";
+		format = "[kernel] panic assert: %s:%d\n[kernel] panic assert: Condition not met: %s\n[kernel] panic assert: %s.\n";
 	cli();
-	printf(format, file != NULL ? file : "?", line, condition, message);
+	printk(format, file != NULL ? file : "?", line, condition, message);
 	abort();
 	return (false);
 }

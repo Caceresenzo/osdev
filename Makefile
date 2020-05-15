@@ -5,10 +5,10 @@ OS_ISO					= $(OS_NAME).iso
 INCLUDE					= include
 LINKER_FILE				= kernel/arch/i386/linker.ld
 
-SOURCES_S				=	kernel/arch/i386/boot.S \
-							kernel/arch/i386/crti.S \
+SOURCES_S				=	kernel/arch/i386/crti.S \
 							kernel/arch/i386/crtn.S
-SOURCES_ASM				=	kernel/asm/gdt_flush.s \
+SOURCES_ASM				=	kernel/arch/i386/boot.s \
+							kernel/asm/gdt_flush.s \
 							kernel/asm/idt_flush.s \
 							kernel/asm/interrupt.s
 SOURCES_C				=	./driver/keyboard/keyboard.c \
@@ -22,6 +22,8 @@ SOURCES_C				=	./driver/keyboard/keyboard.c \
 							./kernel/descriptor_tables.c \
 							./kernel/gdt.c \
 							./kernel/idt.c \
+							./kernel/multiboot.c \
+							./kernel/memory.c \
 							./kernel/interrupt.c \
 							./kernel/interrupt_registry.c \
 							./kernel/kmain.c \
@@ -78,25 +80,29 @@ ISO_BUILD_DIR			= build/iso
 
 GRUB_DIR				= grub
 
-COMPILER_C_ARGUMENTS	= -std=gnu99 -ffreestanding -nostdlib -nodefaultlibs  -fno-builtin -fno-stack-protector -nostartfiles -Wall -Wextra  -m32 -O2
-ASSEMBLER_ARGUMENTS		= -std=gnu99 -ffreestanding -nostdlib -nodefaultlibs  -fno-builtin -fno-stack-protector -nostartfiles -lgcc
+COMPILER_C_ARGUMENTS	= -std=gnu99 -ffreestanding -nostdlib -nodefaultlibs -fno-builtin -fno-stack-protector -nostartfiles -Wall -Wextra  -m32 -O2
+ASSEMBLER_ARGUMENTS		= -std=gnu99 -ffreestanding -nostdlib -nodefaultlibs -fno-builtin -fno-stack-protector -nostartfiles -lgcc
 
 .S.o:
-	i386-elf-gcc -c $< -o ${<:.S=.o}
+	@i386-elf-gcc -c $< -o ${<:.S=.o}
+	@echo [i386-elf-gcc] Compiling: ${<:.S=.o}
 
 .s.o:
-	nasm $< -o ${<:.s=.o} -f elf
+	@nasm $< -o ${<:.s=.o} -f elf
+	@echo [nasm] Compiling: ${<:.s=.o}
 
 .c.o:
-	i386-elf-gcc -c $< -o ${<:.c=.o} $(COMPILER_C_ARGUMENTS) -I$(INCLUDE)
+	@i386-elf-gcc -c $< -o ${<:.c=.o} $(COMPILER_C_ARGUMENTS) -I$(INCLUDE)
+	@echo [i386-elf-gcc] Compiling: ${<:.c=.o}
 
 all: kernel
 
 kernel: $(OS_BIN)
 	
 $(OS_BIN): $(OBJECTS_ASM) $(OBJECTS_C) $(OBJECTS_S)
-	i386-elf-gcc -T $(LINKER_FILE) -o $(OS_BIN) $(ASSEMBLER_ARGUMENTS) $(OBJECTS_ASM) $(OBJECTS_C) $(OBJECTS_S) 
-	@printf "confirming multiboot... "
+	@i386-elf-gcc -T $(LINKER_FILE) -o $(OS_BIN) $(ASSEMBLER_ARGUMENTS) $(OBJECTS_ASM) $(OBJECTS_C) $(OBJECTS_S) 
+	@echo [i386-elf-gcc] Assembling...
+	@printf "[grub-file] Confirming multiboot... "
 	@if grub-file --is-x86-multiboot $(OS_BIN); then echo ok; else echo failed; exit 1; fi
 
 iso: $(OS_ISO)
@@ -108,7 +114,7 @@ $(OS_ISO): kernel
 	grub-mkrescue -o $(OS_ISO) $(ISO_BUILD_DIR)
 
 run-kernel: $(OS_BIN) #,cpu,exec,in_asm -no-shutdown 
-	$(QEMU) -D logs.txt -d int -no-reboot -kernel $(OS_BIN)
+	$(QEMU) -D logs.txt -d int -no-reboot -kernel $(OS_BIN) -serial stdio -m 512M #-monitor stdio
 
 run-iso: $(OS_ISO)
 	$(QEMU) -cdrom $(OS_ISO)
@@ -119,3 +125,6 @@ clean:
 	rm -rf $(ISO_BUILD_DIR)
 	rm -f $(OBJECTS_ASM) $(OBJECTS_C) $(OBJECTS_S)
 	rm -f $(OS_ISO) $(OS_BIN)
+
+setup:
+	sudo apt-get install mtools

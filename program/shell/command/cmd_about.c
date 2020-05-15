@@ -5,5 +5,5 @@ void
 {
 	(void) name;
 	(void) args;
-	printf("A small os wrote by Enzo CACERES\n");
+	printk("A small os wrote by Enzo CACERES\n");
 }

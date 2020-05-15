@@ -1,7 +1,7 @@
 #include <common.h>
 #include <stdio.h>
 
-#define PRINT_SIZE(type) printf("%d <- '%s'\n", sizeof(type), #type)
+#define PRINT_SIZE(type) printk("%d <- '%s'\n", sizeof(type), #type)
 
 void
 	cmd_sizeof_handler(char *name, char *args)

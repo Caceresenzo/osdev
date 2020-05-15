@@ -29,13 +29,13 @@ void
 			if (scancode == 0x2a) {
 				shift = 1;
 			} else if (scancode == 0x1c) {
-				printf("%c", '\n');
+				printk("%c", '\n');
 			} else if (scancode == 0x0e) {
 				vga_backspace();
 			} else if (shift) {
-				printf("%c", charset_get(scancode + 90));
+				printk("%c", charset_get(scancode + 90));
 			} else {
-				printf("%c", charset_get(scancode));
+				printk("%c", charset_get(scancode));
 			}
 		}
 	}

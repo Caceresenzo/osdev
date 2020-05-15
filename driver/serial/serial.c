@@ -34,7 +34,7 @@ bool
 }
 
 void
-	serial_write(uint16 port, uint8 chr)
+	serial_write(uint16 port, int8 chr)
 {
 	while (!serial_is_transmit_empty(port))
 		;
@@ -42,7 +42,7 @@ void
 }
 
 void
-	serial_write_str(uint16 port, uint8 *str)
+	serial_write_str(uint16 port, int8 *str)
 {
 	while (*str)
 		serial_write(port, *str++);

@@ -23,7 +23,7 @@ void
 {
 	if (!handle(regs))
 	{
-		printf("[isr] Unhandled interrupt: %d (%s)\n", regs.int_no & 0xFF, interrupt_error_get(regs.int_no & 0xFF));
+		printk("[isr] Unhandled interrupt: %d (%s)\n", regs.int_no & 0xFF, interrupt_error_get(regs.int_no & 0xFF));
 		while (true) ;
 	}
 }

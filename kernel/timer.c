@@ -11,10 +11,10 @@ void
 	uint32	divider;
 
 	divider = BASE_CLOCK_HZ / frequency;
-	printf("[timer] Divider: %d.\n", divider);
+	printk("[timer] Divider: %d.\n", divider);
 	if ((divider >> 16) != 0)
 	{
-		printf("[timer] Warning: frequency too slow (min ~= 20).\n");
+		printk("[timer] Warning: frequency too slow (min ~= 20).\n");
 		return;
 	}
 	outb(PIT_COMMAND, 0x36);
@@ -28,5 +28,5 @@ void
 {
 	(void) regs;
 	timer_ticks++;
-	printf("[timer] Ticked: %d\n", timer_ticks);
+	printk("[timer] Ticked: %d\n", timer_ticks);
 }

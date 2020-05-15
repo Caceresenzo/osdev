@@ -7,8 +7,8 @@ void
 {
 	(void) name;
 	(void) args;
-	printf("Starting desktop env...");
-	for (int time = 0; time < 1000000; ++time) { printf(""); }
+	printk("Starting desktop env...");
+	for (int time = 0; time < 1000000; ++time) { printk(""); }
 	vga_clear();
 	desktop_start();
 }
