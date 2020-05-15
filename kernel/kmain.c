@@ -1,4 +1,5 @@
 #include <arch/i386/vga.h>
+#include <driver/cpu.h>
 #include <driver/keyboard.h>
 #include <driver/serial.h>
 #include <kernel/descriptor_tables.h>
@@ -29,6 +30,10 @@ void
 
 	printk("--------------------------------------\nHello, kernel World!\n");
 	multiboot_dump();
+
+	char vendor[13] = { 0 };
+	cpuid_vendor_get(vendor);
+	printk("CPU vendor: %s\n", vendor);
 
 //	timer_initizalier(20);
 

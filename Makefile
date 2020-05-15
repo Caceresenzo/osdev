@@ -17,6 +17,7 @@ SOURCES_C				=	./driver/keyboard/keyboard.c \
 							./driver/screen/screen_init.c \
 							./driver/screen/screen_set_offset.c \
 							./driver/serial/serial.c \
+							./driver/cpu/cpuid.c \
 							./kernel/arch/i386/vga.c \
 							./kernel/common.c \
 							./kernel/descriptor_tables.c \
