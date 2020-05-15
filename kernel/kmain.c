@@ -1,6 +1,8 @@
 #include <arch/i386/vga.h>
+#include <common.h>
 #include <driver/cpu.h>
 #include <driver/keyboard.h>
+#include <driver/pci.h>
 #include <driver/serial.h>
 #include <kernel/descriptor_tables.h>
 #include <kernel/multiboot.h>
@@ -20,6 +22,8 @@ static void
 	vga_initialize();
 	descriptor_tables_initialize();
 	keyboard_initialize();
+
+	pci_initialize();
 	sti();
 }
 
@@ -28,8 +32,7 @@ void
 {
 	kinit(ptr);
 
-	printk("--------------------------------------\nHello, kernel World!\n");
-	multiboot_dump();
+	printk("--------------------------------------------------------------------------------Hello, kernel World!\n");
 
 	char vendor[13] = { 0 };
 	cpuid_vendor_get(vendor);

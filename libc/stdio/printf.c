@@ -119,7 +119,7 @@ int printk(const char *format, ...) {
 				written++;
 			}
 			else
-				written += print_number(i, 2);
+				written += print_unumber(i, 2);
 		} else if (*format == 'x') {
 			format++;
 			int i = va_arg(parameters, int);

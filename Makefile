@@ -18,6 +18,9 @@ SOURCES_C				=	./driver/keyboard/keyboard.c \
 							./driver/screen/screen_set_offset.c \
 							./driver/serial/serial.c \
 							./driver/cpu/cpuid.c \
+							./driver/pci/pci.c \
+							./driver/pci/pci_io.c \
+							./driver/pci/pci_registry.c \
 							./kernel/arch/i386/vga.c \
 							./kernel/common.c \
 							./kernel/descriptor_tables.c \
@@ -85,16 +88,16 @@ COMPILER_C_ARGUMENTS	= -std=gnu99 -ffreestanding -nostdlib -nodefaultlibs -fno-b
 ASSEMBLER_ARGUMENTS		= -std=gnu99 -ffreestanding -nostdlib -nodefaultlibs -fno-builtin -fno-stack-protector -nostartfiles -lgcc
 
 .S.o:
+	@echo [i386-elf-gcc] Compiling: ${<}
 	@i386-elf-gcc -c $< -o ${<:.S=.o}
-	@echo [i386-elf-gcc] Compiling: ${<:.S=.o}
 
 .s.o:
+	@echo [nasm] Compiling: ${<}
 	@nasm $< -o ${<:.s=.o} -f elf
-	@echo [nasm] Compiling: ${<:.s=.o}
 
 .c.o:
+	@echo [i386-elf-gcc] Compiling: ${<}
 	@i386-elf-gcc -c $< -o ${<:.c=.o} $(COMPILER_C_ARGUMENTS) -I$(INCLUDE)
-	@echo [i386-elf-gcc] Compiling: ${<:.c=.o}
 
 all: kernel
 
@@ -115,7 +118,8 @@ $(OS_ISO): kernel
 	grub-mkrescue -o $(OS_ISO) $(ISO_BUILD_DIR)
 
 run-kernel: $(OS_BIN) #,cpu,exec,in_asm -no-shutdown 
-	$(QEMU) -D logs.txt -d int -no-reboot -kernel $(OS_BIN) -serial stdio -m 512M #-monitor stdio
+	@echo [qemu] Starting emulator...
+	@$(QEMU) -D logs.txt -d int -no-reboot -kernel $(OS_BIN) -serial stdio -m 512M -usb -device usb-mouse #-monitor stdio
 
 run-iso: $(OS_ISO)
 	$(QEMU) -cdrom $(OS_ISO)
